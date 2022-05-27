@@ -13,7 +13,7 @@ const TodoItem = ({ todo, changeTodo, removeTodo }) => {
         className="flex items-center w-full rounded-2xl p-5"
         onClick={() => changeTodo(todo._id)}
       >
-        <Check isCompleted={todo.isCompleted} />
+        <Check isCompleted={todo.isCompleted} status={todo.status} />
         {todo.title}
       </button>
       <button

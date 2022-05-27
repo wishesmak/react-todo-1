@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import TodoItem from "./item/TodoItem";
 
-import { IoIosAdd } from "react-icons/io";
+import TodoForm from "./TodoForm";
 
 const data = [];
 
 const Home = () => {
   const [todos, setTodos] = useState(data);
+  const [status, setStatus] = useState(0);
 
   const changeTodo = (id) => {
     const copy = [...todos];
@@ -26,7 +27,11 @@ const Home = () => {
         todos.length != 0
           ? Object.keys(todos)[Object.keys(todos).length - 1] + 1
           : 0;
-      const newTodo = { _id: lastId, title: todoTitleRef.current.value };
+      const newTodo = {
+        _id: lastId,
+        title: todoTitleRef.current.value,
+        status: status,
+      };
       const copy = [...todos];
       copy.push(newTodo);
       setTodos(copy);
@@ -46,20 +51,19 @@ const Home = () => {
     <div className="bg-gray-900 h-screen py-10">
       <div className=" text-white w-3/5 mx-auto">
         <h1 className="text-2xl fon-bold text-center mb-8">Todo for junior</h1>
-        <div className="flex mb-5 bg-gray-800 p-5 rounded-2xl">
-          <button
-            className={`border-2  text-pink-400 hover:text-gray-900 border-pink-400 w-7 h-7 rounded-xl mr-2 flex items-center justify-center hover:bg-pink-400 transition-colors ease-in-out`}
-            onClick={addTodo}
-          >
-            <IoIosAdd size={24} />
-          </button>
-          <input
-            onKeyDown={onKeyPressHandler}
-            className="px-3 py-1 ml-1 bg-gray-600 focus:bg-gray-500 hover:bg-gray-500 transition-colors ease-in-out w-full rounded-lg"
-            type="text"
-            ref={todoTitleRef}
-          />
-        </div>
+        <TodoForm
+          addTodo={addTodo}
+          onKeyPressHandler={onKeyPressHandler}
+          todoTitleRef={todoTitleRef}
+          setStatus={setStatus}
+        />
+        <button
+          onClick={() =>
+            setTodos(todos.sort((a, b) => (a.status > b.status ? 1 : -1)))
+          }
+        >
+          Sort
+        </button>
         <div>
           {todos.length != 0 ? (
             todos.map((todo) => (
